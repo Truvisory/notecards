@@ -39,18 +39,24 @@ app.post("/", (req, res, next) => {
 
 app.put("/update/:id", (req, res, next) => {
   console.log(req.body.description)
-  // knex('wallabies').where('id', '=', req.params.id).update(req.body).returning('*')
   db('methods')
   .where('id', '=', req.params.id)
   .update(req.body)
   .returning('*')
-  // .insert({
-  //   "name": req.body.name,
-  //   "description": req.body.description,
-  //   "example": req.body.example,
-  //   "tags": req.body.tag,
-  //   "link": req.body.link
-  // })
+  .then((rows) => {
+    res.send(rows);
+    })
+  .catch((err) => {
+    next(err);
+  })
+})
+
+app.delete("/she-gone/:id", (req, res, next) => {
+  console.log("delete?")
+  db('methods')
+  .where('id', '=', req.params.id)
+  .del()
+  .returning('*')
   .then((rows) => {
     res.send(rows);
     })
